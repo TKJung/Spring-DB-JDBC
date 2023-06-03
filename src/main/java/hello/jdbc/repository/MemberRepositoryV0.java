@@ -66,6 +66,47 @@ public class MemberRepositoryV0 {
         }
     }
 
+        public void update(String memberId, int money) throws SQLException {
+            String sql = "update member set money=? where member_id=?";
+
+            Connection con = null;
+            PreparedStatement pstmt = null;
+
+            try {
+                con = getConnection();
+                pstmt = con.prepareStatement(sql);
+                pstmt.setInt(1, money);
+                pstmt.setString(2, memberId);
+                int resultSize = pstmt.executeUpdate();
+                log.info("resultSize={}", resultSize); // Update는 member_id 1개만 바꾸므로 결과 숫자는 1일 것
+            } catch (SQLException e) {
+                log.error("db error", e);
+                throw e;
+            } finally { // close를 위에 두면, 위쪽에서 예외 날 시 close문이 실행 안 됨. 따라서 반드시 실행되는 finally에 담음.
+                close(con, pstmt, null);
+            }
+        }
+
+        public void delete(String memberId) {
+            String sql = "delete from member where member_id=?";
+
+            Connection con = null;
+            PreparedStatement pstmt = null;
+
+            try {
+                con = getConnection();
+                pstmt = con.prepareStatement(sql);
+                pstmt.setString(1, memberId);
+                pstmt.executeUpdate();
+            } catch (SQLException e) {
+                log.info("delete error", e);
+            } finally {
+                close(con, pstmt, null);
+            }
+
+        }
+
+
 
         // 만약 stmt.close()에서 Exception 나면? con.close() 수행 안 됨. -> 전부 try catch로 묶어야 함 (코드 안정성)
         private void close(Connection con, Statement stmt, ResultSet rs) {
