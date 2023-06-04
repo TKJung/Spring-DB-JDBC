@@ -27,14 +27,14 @@ public class ConnectionTest {
 
     @Test
     void dataSourceDriverManager() throws SQLException{
-        // DriverManagerDataSource - 새로운 커넥션을 획득
+        // DriverManagerDataSource - 항상 새로운 커넥션을 획득
         DriverManagerDataSource dataSource = new DriverManagerDataSource(URL, USERNAME, PASSWORD);
         useDataSource(dataSource);
     }
     
     @Test
     void dataSourceConnectionPool() throws SQLException, InterruptedException {
-        // 커넥션 풀링
+        // 커넥션 풀: 커넥션을 여러 개 담아둠
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setJdbcUrl(URL);
         dataSource.setUsername(USERNAME);
