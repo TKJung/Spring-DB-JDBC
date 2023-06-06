@@ -51,5 +51,11 @@ class MemberRepositoryV2Test {
         repository.delete(member.getMemberId());
         Assertions.assertThatThrownBy(() -> repository.findById(member.getMemberId()))
                 .isInstanceOf(NoSuchElementException.class);
+
+        try {
+            Thread.sleep(1000);  // Sleep을 걸지 않으면 한 번에 주르륵 실행되어 끝나버린다.
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
